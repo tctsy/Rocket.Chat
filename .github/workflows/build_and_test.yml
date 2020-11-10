@@ -414,14 +414,14 @@ jobs:
 
   image-build:
     runs-on: ubuntu-latest
-    needs: deploy
+    needs: build
 
     strategy:
       matrix:
         release: ["official", "preview"]
 
     env:
-      IMAGE: "rocketchat/rocket.chat"
+      IMAGE: "tctsy/tctsy.chat"
 
     steps:
     - uses: actions/checkout@v2
