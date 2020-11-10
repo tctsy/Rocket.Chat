@@ -130,6 +130,16 @@ Meteor.startup(function() {
 				public: true,
 			});
 
+			this.add('Jitsi_Moveable_Window', false, {
+				type: 'boolean',
+				enableQuery: {
+					_id: 'Jitsi_Enabled',
+					value: true,
+				},
+				i18nLabel: 'Jitsi_moveable_window',
+				public: true,
+			});
+
 			this.add('Jitsi_Enable_Channels', false, {
 				type: 'boolean',
 				enableQuery: {
