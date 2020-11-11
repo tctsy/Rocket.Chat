@@ -142,7 +142,7 @@ Template.videoFlexTab.onRendered(function() {
 					var newWindow = undefined;
 
 					if (settings.get('Jitsi_Moveable_Window')) {
-						var windowFeatures = "left=400,top=400,width=";
+						var windowFeatures = "left=400,top=100,width=";
 						windowFeatures += document.body.clientWidth*(0.6);
 						windowFeatures += ",height=";
 						windowFeatures += document.body.clientHeight*(0.6);
