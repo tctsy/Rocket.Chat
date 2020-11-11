@@ -139,19 +139,18 @@ Template.videoFlexTab.onRendered(function() {
 					await start();
 
 					const queryString = accessToken ? `?jwt=${ accessToken }` : '';
-					var newWindow = undefined;
+					let newWindow = undefined;
 
 					if (settings.get('Jitsi_Moveable_Window')) {
-						var windowFeatures = "left=400,top=100,width=";
-						windowFeatures += document.body.clientWidth*(0.6);
-						windowFeatures += ",height=";
-						windowFeatures += document.body.clientHeight*(0.6);
+						let windowFeatures = 'left=400,top=100,width=';
+						windowFeatures += document.body.clientWidth * 0.6;
+						windowFeatures += ',height=';
+						windowFeatures += document.body.clientHeight * 0.6;
 						newWindow = window.open(
-							`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`, 
+							`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`,
 							jitsiRoom,
 							windowFeatures);
-					}
-					else {
+					} else {
 						newWindow = window.open(`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`, jitsiRoom);
 					}
 
