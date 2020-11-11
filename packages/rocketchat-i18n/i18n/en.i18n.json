@@ -2066,6 +2066,7 @@
   "Jitsi_Application_ID": "Application ID (iss)",
   "Jitsi_Application_Secret": "Application Secret",
   "Jitsi_Enable_Channels": "Enable in Channels",
+  "Jitsi_moveable_window": "Make Jitsi window movable",
   "Jitsi_Limit_Token_To_Room": "Limit token to Jitsi Room",
   "Job_Title": "Job Title",
   "join": "Join",

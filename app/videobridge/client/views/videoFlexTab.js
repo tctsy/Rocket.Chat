@@ -139,8 +139,22 @@ Template.videoFlexTab.onRendered(function() {
 					await start();
 
 					const queryString = accessToken ? `?jwt=${ accessToken }` : '';
+					var newWindow = undefined;
 
-					const newWindow = window.open(`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`, jitsiRoom);
+					if (settings.get('Jitsi_Moveable_Window')) {
+						var windowFeatures = "left=400,top=100,width=";
+						windowFeatures += document.body.clientWidth*(0.6);
+						windowFeatures += ",height=";
+						windowFeatures += document.body.clientHeight*(0.6);
+						newWindow = window.open(
+							`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`, 
+							jitsiRoom,
+							windowFeatures);
+					}
+					else {
+						newWindow = window.open(`${ (noSsl ? 'http://' : 'https://') + domain }/${ jitsiRoom }${ queryString }`, jitsiRoom);
+					}
+
 					if (newWindow) {
 						const closeInterval = setInterval(() => {
 							if (newWindow.closed === false) {

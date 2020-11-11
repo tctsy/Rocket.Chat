@@ -1617,6 +1617,7 @@
   "Jitsi_Chrome_Extension": "Chrome Extension Id",
   "Jitsi_Enabled_TokenAuth": "Activer l'authentification JWT",
   "Jitsi_Enable_Channels": "Activer dans les canaux",
+  "Jitsi_moveable_window": "Rendre la fenêtre mobile",
   "Job_Title": "Titre du poste",
   "join": "Rejoindre",
   "join-without-join-code": "Rejoindre sans code de participation",
