@@ -6,14 +6,14 @@ import { useTranslation } from '../contexts/TranslationContext';
 import { isEmail } from '../../app/utils/lib/isEmail.js';
 import { useToastMessageDispatch } from '../contexts/ToastMessagesContext';
 import { useMethod } from '../contexts/ServerContext';
-import { getUserEmailAddress } from '../helpers/getUserEmailAddress';
+import { getUserEmailAddress } from '../lib/getUserEmailAddress';
 import { UserAvatarEditor } from '../components/basic/avatar/UserAvatarEditor';
 import CustomFieldsForm from '../components/CustomFieldsForm';
-import UserStatusMenu from '../components/basic/userStatus/UserStatusMenu';
+import UserStatusMenu from '../components/basic/UserStatusMenu';
 
 const STATUS_TEXT_MAX_LENGTH = 120;
 
-export default function AccountProfileForm({ values, handlers, user, settings, onSaveStateChange, ...props }) {
+function AccountProfileForm({ values, handlers, user, settings, onSaveStateChange, ...props }) {
 	const t = useTranslation();
 	const dispatchToastMessage = useToastMessageDispatch();
 
@@ -133,7 +133,7 @@ export default function AccountProfileForm({ values, handlers, user, settings, o
 			<UserAvatarEditor etag={user.avatarETag} username={username} setAvatarObj={handleAvatar} disabled={!allowUserAvatarChange} suggestions={avatarSuggestions}/>
 		</Field>, [username, handleAvatar, allowUserAvatarChange, avatarSuggestions, user.avatarETag])}
 		<Box display='flex' flexDirection='row' justifyContent='space-between'>
-			{useMemo(() => <Field mie='x8'>
+			{useMemo(() => <Field mie='x8' flexShrink={1}>
 				<Field.Label flexGrow={0}>{t('Name')}</Field.Label>
 				<Field.Row>
 					<TextInput error={nameError} disabled={!allowRealNameChange} flexGrow={1} value={realname} onChange={handleRealname}/>
@@ -145,7 +145,7 @@ export default function AccountProfileForm({ values, handlers, user, settings, o
 					{nameError}
 				</Field.Error>
 			</Field>, [t, realname, handleRealname, allowRealNameChange, nameError])}
-			{useMemo(() => <Field mis='x8' >
+			{useMemo(() => <Field mis='x8' flexShrink={1}>
 				<Field.Label flexGrow={0}>{t('Username')}</Field.Label>
 				<Field.Row>
 					<TextInput error={usernameError} disabled={!canChangeUsername} flexGrow={1} value={username} onChange={handleUsername} addon={<Icon name='at' size='x20'/>}/>
@@ -245,3 +245,5 @@ export default function AccountProfileForm({ values, handlers, user, settings, o
 		<CustomFieldsForm customFieldsData={customFields} setCustomFieldsData={handleCustomFields}/>
 	</FieldGroup>;
 }
+
+export default AccountProfileForm;

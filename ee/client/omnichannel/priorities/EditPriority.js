@@ -22,7 +22,7 @@ export function PriorityEditWithData({ priorityId, reload }) {
 		return <FormSkeleton/>;
 	}
 
-	if (error || !data || !data.priorities) {
+	if (error || !data) {
 		return <Callout m='x16' type='danger'>{t('Not_Available')}</Callout>;
 	}
 
@@ -53,7 +53,6 @@ export function PriorityEdit({ data, isNew, priorityId, reload, ...props }) {
 	} = values;
 
 	const nameError = useMemo(() => (!name || name.length === 0 ? t('The_field_is_required', 'name') : undefined), [name, t]);
-	const descriptionError = useMemo(() => (!description || description.length === 0 ? t('The_field_is_required', 'description') : undefined), [description, t]);
 	const dueTimeInMinutesError = useMemo(() => (!dueTimeInMinutes || dueTimeInMinutes <= 0 ? t('The_field_is_required', 'Estimated_due_time_in_minutes') : undefined), [dueTimeInMinutes, t]);
 
 	const savePriority = useMethod('livechat:savePriority');
@@ -64,7 +63,7 @@ export function PriorityEdit({ data, isNew, priorityId, reload, ...props }) {
 		reload();
 	});
 
-	const canSave = useMemo(() => !nameError && !descriptionError && !dueTimeInMinutesError, [nameError, descriptionError, dueTimeInMinutesError]);
+	const canSave = useMemo(() => !nameError && !dueTimeInMinutesError, [nameError, dueTimeInMinutesError]);
 
 	const handleSave = useMutableCallback(async () => {
 		const payload = { name, description, dueTimeInMinutes: `${ dueTimeInMinutes }` };
@@ -75,7 +74,7 @@ export function PriorityEdit({ data, isNew, priorityId, reload, ...props }) {
 
 		try {
 			await savePriority(priorityId, payload);
-			dispatchToastMessage({ type: 'success', message: t('saved') });
+			dispatchToastMessage({ type: 'success', message: t('Saved') });
 			reload();
 			prioritiesRoute.push({});
 		} catch (error) {
@@ -85,21 +84,21 @@ export function PriorityEdit({ data, isNew, priorityId, reload, ...props }) {
 
 	return <VerticalBar.ScrollableContent is='form' { ...props }>
 		<Field>
-			<Field.Label>{t('Name')}</Field.Label>
+			<Field.Label>{t('Name')}*</Field.Label>
 			<Field.Row>
-				<TextInput flexGrow={1} value={name} onChange={handleName} error={hasUnsavedChanges && nameError}/>
+				<TextInput placeholder={t('Name')} flexGrow={1} value={name} onChange={handleName} error={hasUnsavedChanges && nameError}/>
 			</Field.Row>
 		</Field>
 		<Field>
 			<Field.Label>{t('Description')}</Field.Label>
 			<Field.Row>
-				<TextInput flexGrow={1} value={description} onChange={handleDescription} error={hasUnsavedChanges && descriptionError} />
+				<TextInput placeholder={t('Description')} flexGrow={1} value={description} onChange={handleDescription} />
 			</Field.Row>
 		</Field>
 		<Field>
-			<Field.Label>{t('Estimated_due_time_in_minutes')}</Field.Label>
+			<Field.Label>{t('Estimated_due_time_in_minutes')}*</Field.Label>
 			<Field.Row>
-				<NumberInput value={dueTimeInMinutes} onChange={handleDueTimeInMinutes} flexGrow={1} error={hasUnsavedChanges && dueTimeInMinutesError}/>
+				<NumberInput placeholder={t('Estimated_due_time_in_minutes')} value={dueTimeInMinutes} onChange={handleDueTimeInMinutes} flexGrow={1} error={hasUnsavedChanges && dueTimeInMinutesError}/>
 			</Field.Row>
 		</Field>
 
@@ -107,7 +106,7 @@ export function PriorityEdit({ data, isNew, priorityId, reload, ...props }) {
 			<Box display='flex' flexDirection='row' justifyContent='space-between' w='full'>
 				<Margins inlineEnd='x4'>
 					{ !isNew && <Button flexGrow={1} type='reset' disabled={!hasUnsavedChanges} onClick={handleReset}>{t('Reset')}</Button> }
-					<Button mie='none' flexGrow={1} disabled={!hasUnsavedChanges && !canSave} onClick={handleSave}>{t('Save')}</Button>
+					<Button primary mie='none' flexGrow={1} disabled={!hasUnsavedChanges || !canSave} onClick={handleSave}>{t('Save')}</Button>
 				</Margins>
 			</Box>
 		</Field.Row>

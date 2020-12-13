@@ -4,7 +4,7 @@ import { useDebouncedValue, useMutableCallback } from '@rocket.chat/fuselage-hoo
 import React, { useMemo, useCallback, useState } from 'react';
 import { Table, Icon, Button } from '@rocket.chat/fuselage';
 
-import { Th } from '../../../../client/components/GenericTable';
+import GenericTable from '../../../../client/components/GenericTable';
 import { useTranslation } from '../../../../client/contexts/TranslationContext';
 import { useEndpointDataExperimental } from '../../../../client/hooks/useEndpointDataExperimental';
 import { useMethod } from '../../../../client/contexts/ServerContext';
@@ -23,7 +23,7 @@ export function RemovePriorityButton({ _id, reload }) {
 	const setModal = useSetModal();
 	const dispatchToastMessage = useToastMessageDispatch();
 	const t = useTranslation();
-
+	const prioritiesRoute = useRoute('omnichannel-priorities');
 
 	const handleRemoveClick = useMutableCallback(async () => {
 		try {
@@ -40,6 +40,7 @@ export function RemovePriorityButton({ _id, reload }) {
 			try {
 				await handleRemoveClick();
 				dispatchToastMessage({ type: 'success', message: t('Priority_removed') });
+				prioritiesRoute.push({});
 			} catch (error) {
 				dispatchToastMessage({ type: 'error', message: error });
 			}
@@ -98,10 +99,10 @@ function PrioritiesRoute() {
 	const { data, reload } = useEndpointDataExperimental('livechat/priorities.list', query) || {};
 
 	const header = useMemo(() => [
-		<Th key={'name'} direction={sort[1]} active={sort[0] === 'name'} onClick={onHeaderClick} sort='name' w='x120'>{t('Name')}</Th>,
-		<Th key={'description'} direction={sort[1]} active={sort[0] === 'description'} onClick={onHeaderClick} sort='description' w='x200'>{t('Description')}</Th>,
-		<Th key={'dueTimeInMinutes'} direction={sort[1]} active={sort[0] === 'dueTimeInMinutes'} onClick={onHeaderClick} sort='dueTimeInMinutes' w='x120'>{t('Estimated_due_time')}</Th>,
-		<Th key={'remove'} w='x40'>{t('Remove')}</Th>,
+		<GenericTable.HeaderCell key={'name'} direction={sort[1]} active={sort[0] === 'name'} onClick={onHeaderClick} sort='name'>{t('Name')}</GenericTable.HeaderCell>,
+		<GenericTable.HeaderCell key={'description'} direction={sort[1]} active={sort[0] === 'description'} onClick={onHeaderClick} sort='description'>{t('Description')}</GenericTable.HeaderCell>,
+		<GenericTable.HeaderCell key={'dueTimeInMinutes'} direction={sort[1]} active={sort[0] === 'dueTimeInMinutes'} onClick={onHeaderClick} sort='dueTimeInMinutes'>{t('Estimated_due_time')}</GenericTable.HeaderCell>,
+		<GenericTable.HeaderCell key={'remove'} w='x60'>{t('Remove')}</GenericTable.HeaderCell>,
 	].filter(Boolean), [sort, onHeaderClick, t]);
 
 	const renderRow = useCallback(({ _id, name, description, dueTimeInMinutes }) => <Table.Row key={_id} tabIndex={0} role='link' onClick={onRowClick(_id)} action qa-user-id={_id}>
@@ -146,7 +147,7 @@ function PrioritiesRoute() {
 		reload={reload}
 		header={header}
 		renderRow={renderRow}
-		title={'Priorities'}>
+		title={t('Priorities')}>
 		<EditPrioritiesTab />
 	</PrioritiesPage>;
 }

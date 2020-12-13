@@ -14,7 +14,7 @@ import AgentsOverview from './overviews/AgentsOverview';
 import ChatsOverview from './overviews/ChatsOverview';
 import ProductivityOverview from './overviews/ProductivityOverview';
 import DepartmentAutoComplete from '../DepartmentAutoComplete';
-import { getDateRange } from '../../helpers/getDateRange';
+import { getDateRange } from '../../lib/getDateRange';
 import { useTranslation } from '../../contexts/TranslationContext';
 
 const dateRange = getDateRange();
@@ -62,13 +62,13 @@ const RealTimeMonitoringPage = () => {
 		<Page.ScrollableContentWithShadow>
 			<Margins block='x4'>
 				<Box flexDirection='row' display='flex' justifyContent='space-between' alignSelf='center' w='full'>
-					<Field mie='x4'>
+					<Field mie='x4' flexShrink={1}>
 						<Field.Label>{t('Department')}</Field.Label>
 						<Field.Row>
 							<DepartmentAutoComplete placeholder={t('All')} value={department} onChange={setDepartment}/>
 						</Field.Row>
 					</Field>
-					<Field mis='x4'>
+					<Field mis='x4' flexShrink={1}>
 						<Field.Label>{t('Update_every')}</Field.Label>
 						<Field.Row>
 							<Select options={reloadOptions} onChange={useMutableCallback((val) => setReloadFrequency(val))} value={reloadFrequency}/>

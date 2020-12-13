@@ -33,7 +33,6 @@ Template.headerRoom.helpers({
 		const room = Rooms.findOne(this._id);
 		return !roomTypes.getConfig(room.t).isGroupChat(room);
 	},
-	isDirect() { return Rooms.findOne(this._id).t === 'd'; },
 	isToggleFavoriteButtonVisible: () => Template.instance().state.get('favorite') !== null,
 	isToggleFavoriteButtonChecked: () => Template.instance().state.get('favorite'),
 	toggleFavoriteButtonIconLabel: () => (Template.instance().state.get('favorite') ? t('Unfavorite') : t('Favorite')),
@@ -178,31 +177,7 @@ Template.headerRoom.events({
 			});
 		}
 	},
-	'click .rc-header__content.rc-header__block'(event, instance) {
-		const { tabBar } = instance.parentTemplate();
-		const $flexTab = $('.flex-tab-container .flex-tab');
 
-		if (tabBar.getState() === 'opened' && (tabBar.getTemplate() === 'channelSettings' || tabBar.getTemplate() === 'membersList')) {
-			$flexTab.attr('template', '');
-			return tabBar.close();
-		}
-
-		if (instance.currentChannel.t !== 'd') {
-			$flexTab.attr('template', 'channelSettings');
-			tabBar.setData({
-				label: 'Room_Info',
-				icon: 'info-circled',
-			});
-			tabBar.open(TabBar.getButton('channel-settings'));
-		} else {
-			$flexTab.attr('template', 'membersList');
-			tabBar.setData({
-				label: 'User_Info',
-				icon: 'info-user',
-			});
-			tabBar.open(TabBar.getButton('user-info'));
-		}
-	},
 });
 
 const loadUserStatusText = () => {

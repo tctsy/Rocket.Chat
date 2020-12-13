@@ -4,7 +4,6 @@ import { Meteor } from 'meteor/meteor';
 import { Roles, Permissions, Settings } from '../../models/server';
 import { settings } from '../../settings/server';
 import { getSettingPermissionId, CONSTANTS } from '../lib';
-import { clearCache } from './functions/hasPermission';
 
 Meteor.startup(function() {
 	// Note:
@@ -43,6 +42,7 @@ Meteor.startup(function() {
 		{ _id: 'edit-other-user-password',           roles: ['admin'] },
 		{ _id: 'edit-other-user-avatar',             roles: ['admin'] },
 		{ _id: 'edit-other-user-e2ee',               roles: ['admin'] },
+		{ _id: 'edit-other-user-totp',               roles: ['admin'] },
 		{ _id: 'edit-privileged-setting',            roles: ['admin'] },
 		{ _id: 'edit-room',                          roles: ['admin', 'owner', 'moderator'] },
 		{ _id: 'edit-room-avatar',                   roles: ['admin', 'owner', 'moderator'] },
@@ -187,7 +187,15 @@ Meteor.startup(function() {
 		}, { fields: { _id: 1 } });
 
 		if (!existent) {
-			Permissions.upsert({ _id: permissionId }, { $set: permission });
+			try {
+				Permissions.upsert({ _id: permissionId }, { $set: permission });
+			} catch (e) {
+				if (!e.message.includes('E11000')) {
+					// E11000 refers to a MongoDB error that can occur when using unique indexes for upserts
+					// https://docs.mongodb.com/manual/reference/method/db.collection.update/#use-unique-indexes
+					Permissions.upsert({ _id: permissionId }, { $set: permission });
+				}
+			}
 		}
 
 		delete previousSettingPermissions[permissionId];
@@ -223,12 +231,4 @@ Meteor.startup(function() {
 	};
 
 	settings.onload('*', createPermissionForAddedSetting);
-
-	Roles.on('change', ({ diff }) => {
-		if (diff && Object.keys(diff).length === 1 && diff._updatedAt) {
-			// avoid useless changes
-			return;
-		}
-		clearCache();
-	});
 });
