@@ -5,7 +5,7 @@ import { kitContext, UiKitComponent, UiKitModal, modalParser } from '@rocket.cha
 import { uiKitText } from '@rocket.chat/ui-kit';
 import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 
-import { renderMessageBody } from '../../../app/ui-utils/client';
+import { renderMessageBody } from '../../lib/renderMessageBody';
 import { getURL } from '../../../app/utils/lib/getURL';
 import * as ActionManager from '../../../app/ui-message/client/ActionManager';
 
@@ -149,7 +149,7 @@ export function ModalBlock({
 		<AnimatedVisibility visibility={AnimatedVisibility.UNHIDING}>
 			<Modal open id={id} ref={ref}>
 				<Modal.Header>
-					<Modal.Thumb url={getURL(`/api/apps/${ appId }/icon`)} />
+					{view.showIcon ? <Modal.Thumb url={getURL(`/api/apps/${ appId }/icon`)} /> : null}
 					<Modal.Title>{textParser([view.title])}</Modal.Title>
 					<Modal.Close tabIndex={-1} onClick={onClose} />
 				</Modal.Header>
